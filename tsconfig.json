@@ -6,21 +6,23 @@
     "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
-    "noImplicitReturns": true,
     "noUncheckedIndexedAccess": true,
+    "isolatedModules": true,
+    "checkJs": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "incremental": true,
+    "target": "es2019",
+    "module": "commonjs",
+    "sourceMap": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-
-    "isolatedModules": true,
-
-    "checkJs": true,
-
+    "noImplicitReturns": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "types": ["node"]
+    "forceConsistentCasingInFileNames": true
   },
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Strictest",
-  "_version": "2.0.0"
+  "include": ["src"],
+  "$schema": "https://json.schemastore.org/tsconfig"
 }

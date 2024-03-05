@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --noEmit && ncc build src/start.ts -o build -m",
     "lint": "eslint \"**/*.{ts,tsx}\" --ext .ts",
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier . --write",

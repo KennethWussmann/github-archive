@@ -1,0 +1,57 @@
+name: release-docker-develop
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency: release-docker-develop
+
+env:
+  FORCE_COLOR: 1
+
+jobs:
+  build:
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - runner: buildjet-8vcpu-ubuntu-2204-arm
+            arch: arm64
+          - runner: ubuntu-latest
+            arch: amd64
+    permissions:
+      packages: write
+      contents: read
+    outputs:
+      SHORT_SHA: ${{ steps.git-commit.outputs.SHORT_SHA }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get git commit
+        id: git-commit
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> "$GITHUB_OUTPUT"
+      - uses: ./.github/actions/docker-publish
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          tags: ghcr.io/kennethwussmann/github-archive:${{ matrix.arch }}-${{ steps.git-commit.outputs.SHORT_SHA }}
+          build-args: VERSION=${{ steps.git-commit.outputs.SHORT_SHA }}
+
+  create-and-push-manifest:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Login to GitHub Packages Docker Registry
+        uses: docker/login-action@v3
+        with:
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+      - name: Create and push Docker manifest
+        run: |
+          docker manifest create ghcr.io/kennethwussmann/github-archive:develop \
+            --amend ghcr.io/kennethwussmann/github-archive:amd64-${{ needs.build.outputs.SHORT_SHA }} \
+            --amend ghcr.io/kennethwussmann/github-archive:arm64-${{ needs.build.outputs.SHORT_SHA }}
+          docker manifest push ghcr.io/kennethwussmann/github-archive:develop
