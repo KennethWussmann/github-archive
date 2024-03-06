@@ -10,7 +10,7 @@
     "isolatedModules": true,
     "checkJs": true,
     "skipLibCheck": true,
-    "types": ["node"],
+    "types": ["node", "vitest"],
     "incremental": true,
     "target": "es2019",
     "module": "commonjs",
@@ -23,6 +23,6 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src"],
+  "include": ["src", "test", "scripts"],
   "$schema": "https://json.schemastore.org/tsconfig"
 }

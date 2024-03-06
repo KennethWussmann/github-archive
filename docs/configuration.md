@@ -1,39 +1,89 @@
 # Configuration
 
-This document outlines the environment variables used to configure the behavior of github-archive.
+This document outlines the options used to configure the behavior of github-archive.
 
-## Configuration Overview
+## Jobs Configuration File
 
-The application uses the following environment variables for its configuration:
+github-archive allows to define multiple archival jobs. This is handy if you want to archive the starred repositories of mulitple GitHub users.
 
-- `GITHUB_USER`: The GitHub username. **Required.**
-- `GITHUB_PAT`: Personal Access Token(s) for GitHub, separated by commas (,). Will be used for polling starred repos as well as by Gitea to import data. Optional, but required if migration items other than `wiki` are specified.
-- `GITEA_ORG`: The Gitea organization name where mirrors will be created. Only one of `GITEA_ORG` or `GITEA_USER` can be specified. The org has to exist, it will not be created. Optional.
-- `GITEA_USER`: The Gitea username where mirrors will be created. Only one of `GITEA_ORG` or `GITEA_USER` can be specified. Optional.
-- `GITEA_API_KEY`: The API key for Gitea. **Required.**
-- `GITEA_URL`: The URL for the Gitea instance. **Required.** (Example format: `https://gitea.example.com/api/v1`)
-- `GITEA_CREATE_PUBLIC`: Determines if the repositories should be created as public in Gitea. Defaults to `false`. Acceptable values are `true` or `false`.
-- `GITEA_MIGRATION_ITEMS`: Specifies the items to be migrated to Gitea. Defaults to `wiki`. Each item should be separated by a comma (,). The possible items are:
+Jobs are configured in a `jobs.yaml` or `jobs.json` that can be mounted into the Docker container. It can be written in either JSON or YAML. We will use YAML in all examples.
 
-  - `wiki`
-  - `labels`
-  - `issues`
-  - `pull-requests`
-  - `releases`
-  - `milestones`
+```YAML
+githubSource:
+  accessTokens: # Define GitHub Personal Access Tokens that should be used. Optional in most cases.
+    - token1
+    - token2
+  # Alternatively you can also only specify one:
+  # accessTokens: single-token
+giteaDestination:
+  # The org in which repositories will be created in. Either org or user is required. They cannot be used together.
+  org: exampleOrg
+  # The username of the user in which repositories will be created in. Either org or user is required. They cannot be used together.
+  user: exampleUser
+  # The URL of the Gitea instance ending with "/api/v1" where the repos will be created
+  url: https://try.gitea.io/api/v1
+  # Access Token to the above configured Gitea instance
+  accessToken: exampleAccessToken
+  # Whether Gitea should regularly sync the content of the upstream repo. Optional, default: true
+  #mirror: true
+  # Interval at which Gitea should re-sync. Optional, default: 24h
+  #interval: 24h
+  # Visibility of the Gitea repo. Optional, default: false
+  #public: false
+  # The items that Gitea should migrate. When using anything in addition to "wiki", the GitHub Access Token is required
+  items:
+    - wiki
+    #- labels
+    #- issues
+    #- pull-requests
+    #- releases
+    #- milestones
+jobs:
+  - type: starred # Required! Has to be "starred". There are currently no other types available.
+    # Some descriptive name for the job used in logs
+    name: My Example Job
+    # Whether this job should be actually syncing repos. Can be handy to temporarily disable a job. Optional, default: true
+    #active: true
+    # Cron expression that configures when this job should run. Optional, default: 0 0 * * *
+    #schedule: 0 0 * * *
+    githubSource:
+      # Required. The GitHub username of the user that this job is syncing starred repos from.
+      user: exampleGitHubUser
+      # You can optionally overwrite the GitHub access tokens per job. They will be used instead the above configured
+      #accessTokens:
+      #  - token1
+      #  - token2
+      # Option 2: As a single string (commented out)
+      # accessTokens: single-token-string
+    # You can optionally overwrite the above configured Gitea mirror settings. They will be merged with the above settings. This allows to configure a different Gitea instance per job or further customize mirroring by job
+    #giteaDestination:
+    #  org: exampleOrg
+    #  user: exampleUser
+    #  accessToken: exampleAccessToken
+    #  url: https://example.com
+    #  mirror: true
+    #  public: false
+    #  interval: 24h
+    #  items:
+    #    - wiki
+    #    - labels
+    #    - issues
+    #    - pull-requests
+    #    - releases
+    #    - milestones
+```
 
-  This is nullable. When using together with `GITEA_MIRROR=true`, only `wiki` is supported. If mirroring is disabled, all can be imported once, but won't continously mirror.
+## GitHub Access Tokens and Rate Limiting
 
-- `GITEA_MIRROR`: Whether to keep the repo in sync with the upstream source. Defaults to `true`. Acceptable values are `true` or `false`.
-- `GITEA_MIRROR_INTERVAL`: The interval at which the repository should be mirrored. Defaults to `24h` (once a day).
-- `CRON_SCHEDULE`: The schedule for the cron job at which it will create mirrors of starred repos in cron format. Defaults to `0 0 * * *` (runs at midnight every day).
+GitHub access tokens are not always required. When the user you want to mirror starred repos from has their details public for example. But when you use other migration items apart from only `wiki`, at least one GitHub access token is required.
 
-## Rate Limiting
+The GitHub API will rate limit at some point. That's why multiple access tokens can be specified. That will cause Gitea to rotate them when needed.
 
-The GitHub API will rate-rate limit at some point. You can specify multiple personal access tokens in `GITHUB_PAT` by separating them by comma. That will cause Gitea to rotate them when needed.
+## Environment Variables
 
-## Debugging and Monitoring
+In addition to the YAML/JSON configuration there are some configuration options via environment variables:
 
+- `JOBS_FILE_PATH`: Path to file on disk where the jobs are configured. This can be a path to a `.yaml` or `.json` file, what ever file format you prefer. Default `./jobs.yaml`. Optional.
 - `LOG_LEVEL`: Log level used to control visiblity of messages. The possible items are:
   - `info` (default)
   - `debug`

@@ -1,33 +1,7 @@
-import { type Logger } from "winston";
-import { type GitHubApiService } from "./api/github/githubApiService";
-import { schedule } from "node-cron";
-import { type GiteaApiService } from "./api/gitea/giteaApiService";
-export class ArchivalService {
-  private importInProgress = false;
-  private task = schedule(this.cronSchedule, () => {
-    void this.archive();
-  });
+import { Job } from "./job";
 
-  constructor(
-    private readonly logger: Logger,
-    private readonly githubApiService: GitHubApiService,
-    private readonly giteaApiService: GiteaApiService,
-    private readonly cronSchedule: string,
-  ) {}
-
-  start = () => {
-    this.logger.info("Starting archival schedule", {
-      cronSchedule: this.cronSchedule,
-    });
-    this.task.start();
-  };
-
-  stop = () => {
-    this.logger.info("Stopping archival schedule");
-    this.task.stop();
-  };
-
-  archive = async () => {
+export class StarredJob extends Job {
+  run = async () => {
     if (this.importInProgress) {
       this.logger.info("Import already in progress");
       return;
@@ -51,10 +25,14 @@ export class ArchivalService {
         count: giteaRepos.length,
       });
 
-      const nonExistentRepos = starredRepos.filter(
-        (starredRepo) =>
-          !giteaRepos.some((giteaRepo) => giteaRepo.name === starredRepo.name),
-      );
+      const nonExistentRepos = starredRepos
+        .filter(
+          (starredRepo) =>
+            !giteaRepos.some(
+              (giteaRepo) => giteaRepo.name === starredRepo.name,
+            ),
+        )
+        .slice(0, 1);
 
       this.logger.info(
         `Found ${nonExistentRepos.length} repos to archive. Beginning archival. This may take a while.`,
@@ -85,5 +63,6 @@ export class ArchivalService {
       });
     }
     this.importInProgress = false;
+    this.logger.info("Finished archiving starred repos");
   };
 }

@@ -15,5 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/pnpm-install
+      - run: pnpm format:check
       - run: pnpm lint
       - run: pnpm build
+      - run: pnpm test

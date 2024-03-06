@@ -13,5 +13,8 @@
     "**/Thumbs.db": true,
     "**/node_modules": true,
     "**/.turbo": true
+  },
+  "yaml.schemas": {
+    "schemas/jobs.schema.json": "jobs.yaml"
   }
 }

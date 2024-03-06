@@ -5,6 +5,11 @@
   </p>
 </div>
 
+## Features
+
+- [x] Back-up GitHub starred repos to Gitea
+- [x] Define multiple jobs for different users and different Gitea destinations
+
 ## In a nutshell
 
 GitHub repos that were previously open-source sometimes get taken down. `github-archive` is a cronjob as a Docker image that will poll the repos that you starred on GitHub and will automatically create a mirror in your [Gitea](https://gitea.com/) instance.
@@ -14,16 +19,32 @@ Gitea will download the repository and can even download wikis, labels, issues, 
 
 `github-archive` is a simple Docker image to just host somewhere and run in the background.
 
+**`docker-compose.yaml`**
+
 ```YAML
 services:
   github-archive:
     image: ghcr.io/kennethwussmann/github-archive:latest
     restart: always
-    environment:
-      GITHUB_USER: Username
-      GITEA_ORG: github-archive
-      GITEA_API_KEY: <fill-me>
-      GITEA_URL: https://gitea.example.com/api/v1
+    volumes:
+      - ./jobs.yaml:/app/jobs.yaml
+```
+
+**`jobs.yaml`**
+
+```YAML
+githubSource:
+  accessTokens: "fill-me"
+giteaDestination:
+  url: https://try.gitea.io/api/v1
+  accessToken: "fill-me"
+  org: github-archive-test
+jobs:
+  - type: starred
+    name: "Starred Repos"
+    schedule: "1 0 * * *"
+    githubSource:
+      user: "SomeUsername"
 ```
 
 For more details see the [Getting Started guide](./docs/getting-started.md) and [Configuration guide](./docs/configuration.md)
