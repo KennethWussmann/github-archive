@@ -17,6 +17,7 @@ export class GiteaApiService {
     private readonly createPublic: boolean,
     private readonly mirrorInterval: string,
     private readonly gitHubPATs: string[],
+    private readonly mirror: boolean,
     private readonly migrationItems: GiteaMigrationItem[],
   ) {
     this.logger.info("MIGRATION ITEMS", { migrationItems });
@@ -79,7 +80,7 @@ export class GiteaApiService {
     }
     const request: CreateRepoMirrorRequest = {
       service: "github",
-      mirror: true,
+      mirror: this.mirror,
       mirror_interval: this.mirrorInterval,
       clone_addr: sourceRepo.clone_url,
       repo_name: sourceRepo.name,

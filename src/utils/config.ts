@@ -32,12 +32,16 @@ export const config = z
       .transform((val) => val.toLowerCase() === "true"),
     GITEA_MIGRATION_ITEMS: z
       .string()
-      .default("wiki,labels,issues,pull-requests,releases,milestones")
+      .default("wiki")
       .transform((val) =>
         val.split(",").map((item) => giteaMigrationItem.parse(item)),
       )
       .nullable(),
-    GITEA_MIRROR_INTERVAL: z.string().default("1d"),
+    GITEA_MIRROR: z
+      .string()
+      .default("true")
+      .transform((val) => val.toLowerCase() === "true"),
+    GITEA_MIRROR_INTERVAL: z.string().default("24h"),
     CRON_SCHEDULE: z.string().default("0 0 * * *"),
   })
   .parse(process.env);

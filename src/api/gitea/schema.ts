@@ -14,7 +14,7 @@ const createRepoMirrorRequest = z.object({
   repo_name: z.string(),
   clone_addr: z.string(),
   description: z.string().nullable(),
-  mirror: z.literal(true),
+  mirror: z.boolean(),
   mirror_interval: z.string(),
   private: z.boolean(),
   service: z.literal("github"),

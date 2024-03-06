@@ -21,6 +21,7 @@ class ApplicationContext {
     config.GITEA_CREATE_PUBLIC,
     config.GITEA_MIRROR_INTERVAL,
     config.GITHUB_PAT ?? [],
+    config.GITEA_MIRROR,
     config.GITEA_MIGRATION_ITEMS ?? [],
   );
   public archivalService = new ArchivalService(
