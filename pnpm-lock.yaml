@@ -5,6 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  dotenv:
+    specifier: ^16.4.5
+    version: 16.4.5
+  node-cron:
+    specifier: ^3.0.3
+    version: 3.0.3
   winston:
     specifier: ^3.12.0
     version: 3.12.0
@@ -22,6 +28,9 @@ devDependencies:
   "@types/node":
     specifier: ^20.11.24
     version: 20.11.24
+  "@types/node-cron":
+    specifier: ^3.0.11
+    version: 3.0.11
   "@typescript-eslint/eslint-plugin":
     specifier: ^7.1.1
     version: 7.1.1(@typescript-eslint/parser@7.1.1)(eslint@8.57.0)(typescript@5.3.3)
@@ -822,6 +831,13 @@ packages:
     resolution:
       {
         integrity: sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==,
+      }
+    dev: true
+
+  /@types/node-cron@3.0.11:
+    resolution:
+      {
+        integrity: sha512-0ikrnug3/IyneSHqCBeslAhlK2aBfYek1fGo4bP4QnZPmiqSGRK+Oy7ZMisLWkesffJvQ1cqAcBnJC+8+nxIAg==,
       }
     dev: true
 
@@ -2038,6 +2054,14 @@ packages:
     dependencies:
       is-obj: 2.0.0
     dev: true
+
+  /dotenv@16.4.5:
+    resolution:
+      {
+        integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==,
+      }
+    engines: { node: ">=12" }
+    dev: false
 
   /duplexer@0.1.2:
     resolution:
@@ -4581,6 +4605,16 @@ packages:
     engines: { node: ">= 0.6" }
     dev: true
 
+  /node-cron@3.0.3:
+    resolution:
+      {
+        integrity: sha512-dOal67//nohNgYWb+nWmg5dkFdIwDm8EpeGYMekPMrngV3637lqnX0lbUcCtgibHTz6SEz7DAIjKvKDFYCnO1A==,
+      }
+    engines: { node: ">=6.0.0" }
+    dependencies:
+      uuid: 8.3.2
+    dev: false
+
   /node-domexception@1.0.0:
     resolution:
       {
@@ -6462,6 +6496,14 @@ packages:
       {
         integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==,
       }
+
+  /uuid@8.3.2:
+    resolution:
+      {
+        integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==,
+      }
+    hasBin: true
+    dev: false
 
   /validate-npm-package-license@3.0.4:
     resolution:

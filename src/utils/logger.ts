@@ -58,5 +58,3 @@ export const createLogger = ({
         | DailyRotateFile => !!t,
     ),
   });
-
-export const rootLogger = createLogger({ meta: { name: "GitHubArchive" } });

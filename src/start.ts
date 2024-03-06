@@ -1,8 +1,5 @@
-import { rootLogger } from "./utils/logger";
+import { defaultApplicationContext } from "./applicationContext";
 
-const start = async () => {
-  rootLogger.info("Starting GitHub archiver");
-  await new Promise((resolve) => setTimeout(resolve, 100000));
-};
-
-void start();
+const { archivalService } = defaultApplicationContext;
+archivalService.start();
+void archivalService.archive();
