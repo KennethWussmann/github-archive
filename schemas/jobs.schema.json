@@ -21,9 +21,7 @@
           ]
         }
       },
-      "required": [
-        "accessTokens"
-      ],
+      "required": ["accessTokens"],
       "additionalProperties": false
     },
     "giteaDestination": {
@@ -62,9 +60,7 @@
               "milestones"
             ]
           },
-          "default": [
-            "wiki"
-          ]
+          "default": ["wiki"]
         },
         "interval": {
           "type": "string",
@@ -110,9 +106,7 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "user"
-                ],
+                "required": ["user"],
                 "additionalProperties": false
               },
               "giteaDestination": {
@@ -127,22 +121,14 @@
                 "const": "starred"
               }
             },
-            "required": [
-              "name",
-              "githubSource",
-              "type"
-            ],
+            "required": ["name", "githubSource", "type"],
             "additionalProperties": false
           }
         ]
       }
     }
   },
-  "required": [
-    "githubSource",
-    "giteaDestination",
-    "jobs"
-  ],
+  "required": ["githubSource", "giteaDestination", "jobs"],
   "additionalProperties": false,
   "$schema": "http://json-schema.org/draft-07/schema#"
 }
