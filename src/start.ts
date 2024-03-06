@@ -1,5 +1,4 @@
 import { defaultApplicationContext } from "./applicationContext";
 
-const { archivalService } = defaultApplicationContext;
-archivalService.start();
-void archivalService.archive();
+const { jobService } = defaultApplicationContext;
+void jobService.start().then(jobService.runAllJobs);

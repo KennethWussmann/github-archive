@@ -1,0 +1,134 @@
+{
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "githubSource": {
+      "type": "object",
+      "properties": {
+        "accessTokens": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": ["accessTokens"],
+      "additionalProperties": false
+    },
+    "giteaDestination": {
+      "type": "object",
+      "properties": {
+        "org": {
+          "type": "string"
+        },
+        "user": {
+          "type": "string"
+        },
+        "accessToken": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "mirror": {
+          "type": "boolean",
+          "default": true
+        },
+        "public": {
+          "type": "boolean",
+          "default": false
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "wiki",
+              "labels",
+              "issues",
+              "pull-requests",
+              "releases",
+              "milestones"
+            ]
+          },
+          "default": ["wiki"]
+        },
+        "interval": {
+          "type": "string",
+          "default": "24h"
+        }
+      },
+      "additionalProperties": false
+    },
+    "jobs": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "active": {
+                "type": "boolean",
+                "default": true
+              },
+              "githubSource": {
+                "type": "object",
+                "properties": {
+                  "accessTokens": {
+                    "anyOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "user": {
+                    "type": "string"
+                  }
+                },
+                "required": ["user"],
+                "additionalProperties": false
+              },
+              "giteaDestination": {
+                "$ref": "#/properties/giteaDestination"
+              },
+              "schedule": {
+                "type": "string",
+                "default": "0 0 * * *"
+              },
+              "type": {
+                "type": "string",
+                "const": "starred"
+              }
+            },
+            "required": ["name", "githubSource", "type"],
+            "additionalProperties": false
+          }
+        ]
+      }
+    }
+  },
+  "required": ["githubSource", "giteaDestination", "jobs"],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

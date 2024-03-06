@@ -1,1 +1,4 @@
+pnpm generate-schema
+pnpm prettier ./schemas --write
+git add ./schemas
 npx lint-staged

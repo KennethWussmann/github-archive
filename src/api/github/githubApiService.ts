@@ -68,3 +68,15 @@ export class GitHubApiService {
     return allRepos;
   };
 }
+
+export type GitHubApiServiceFactory = (
+  logger: Logger,
+  pat: string | undefined,
+  user: string,
+) => GitHubApiService;
+
+export const defaultGitHubApiServiceFactory: GitHubApiServiceFactory = (
+  logger,
+  pat,
+  user,
+) => new GitHubApiService(logger, pat, user);

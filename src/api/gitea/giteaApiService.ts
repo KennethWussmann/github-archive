@@ -5,20 +5,13 @@ import {
   type CreateRepoMirrorRequest,
 } from "./schema";
 import { type GitHubRepo } from "../github/schema";
-import { type GiteaMigrationItem } from "../../utils/config";
+import { type GiteaMirrorSettings } from "../jobs/schema";
 
 export class GiteaApiService {
   constructor(
     private readonly logger: Logger,
-    private readonly url: string,
-    private readonly apiKey: string,
-    private readonly org: string | undefined,
-    private readonly user: string | undefined,
-    private readonly createPublic: boolean,
-    private readonly mirrorInterval: string,
-    private readonly gitHubPATs: string[],
-    private readonly mirror: boolean,
-    private readonly migrationItems: GiteaMigrationItem[],
+    private readonly settings: GiteaMirrorSettings,
+    private readonly githubAccessTokens: string[],
   ) {}
 
   private getReposFromPath = async (path: string) => {
@@ -28,10 +21,11 @@ export class GiteaApiService {
     let hasMore = true;
 
     while (hasMore) {
-      const url = `${this.url}${path}?${new URLSearchParams({ limit: limit.toString(), page: page.toString() }).toString()}`;
+      const url = `${this.settings.url}${path}?${new URLSearchParams({ limit: limit.toString(), page: page.toString() }).toString()}`;
       const response = await fetch(url, {
         headers: {
-          Authorization: `token ${this.apiKey}`,
+          Authorization: `token ${this.settings.accessToken}`,
+          "Content-Type": "application/json",
         },
       });
 
@@ -46,13 +40,12 @@ export class GiteaApiService {
 
       const repos: GiteaRepo[] = repoListResponse.parse(await response.json());
 
-      if (repos.length < limit) {
-        hasMore = false;
-      } else {
+      if (repos.length > 0) {
+        allRepos.push(...repos);
         page++;
+      } else {
+        hasMore = false;
       }
-
-      allRepos.push(...repos);
     }
 
     this.logger.debug(`Fetched repos`, {
@@ -64,45 +57,46 @@ export class GiteaApiService {
   };
 
   public getRepos = async (): Promise<GiteaRepo[]> => {
-    if (this.org) {
-      return this.getReposFromPath(`/orgs/${this.org}/repos`);
+    if (this.settings.org) {
+      return this.getReposFromPath(`/orgs/${this.settings.org}/repos`);
     } else {
       return this.getReposFromPath("/repos");
     }
   };
 
   public createRepoMirror = async (sourceRepo: GitHubRepo) => {
-    const owner = this.org ?? this.user;
+    const owner = this.settings.org ?? this.settings.user;
     if (!owner) {
       throw new Error("No owner found");
     }
     const request: CreateRepoMirrorRequest = {
       service: "github",
-      mirror: this.mirror,
-      mirror_interval: this.mirrorInterval,
+      mirror: this.settings.mirror ?? true,
+      mirror_interval: this.settings.interval ?? "24h",
       clone_addr: sourceRepo.clone_url,
       repo_name: sourceRepo.name,
       repo_owner: owner,
-      auth_token: this.gitHubPATs.join(","),
+      auth_token: this.githubAccessTokens.join(","),
       description: sourceRepo.description,
-      private: !this.createPublic,
-      issues: this.migrationItems.some((item) => item === "issues"),
-      labels: this.migrationItems.some((item) => item === "labels"),
-      milestones: this.migrationItems.some((item) => item === "milestones"),
-      releases: this.migrationItems.some((item) => item === "releases"),
-      pull_requests: this.migrationItems.some(
-        (item) => item === "pull-requests",
-      ),
-      wiki: this.migrationItems.some((item) => item === "wiki"),
+      private: !this.settings.public,
+      issues: this.settings.items?.some((item) => item === "issues") ?? false,
+      labels: this.settings.items?.some((item) => item === "labels") ?? false,
+      milestones:
+        this.settings.items?.some((item) => item === "milestones") ?? false,
+      releases:
+        this.settings.items?.some((item) => item === "releases") ?? false,
+      pull_requests:
+        this.settings.items?.some((item) => item === "pull-requests") ?? false,
+      wiki: this.settings.items?.some((item) => item === "wiki") ?? false,
     };
     this.logger.debug(`Creating repo mirror`, {
       sourceRepo,
       request,
     });
-    const response = await fetch(`${this.url}/repos/migrate`, {
+    const response = await fetch(`${this.settings.url}/repos/migrate`, {
       method: "POST",
       headers: {
-        Authorization: `token ${this.apiKey}`,
+        Authorization: `token ${this.settings.accessToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(request),
@@ -117,3 +111,15 @@ export class GiteaApiService {
     }
   };
 }
+
+export type GiteaApiServiceFactory = (
+  logger: Logger,
+  settings: GiteaMirrorSettings,
+  githubAccessTokens: string[],
+) => GiteaApiService;
+
+export const defaultGiteaApiServiceFactory: GiteaApiServiceFactory = (
+  logger,
+  settings,
+  githubAccessTokens,
+) => new GiteaApiService(logger, settings, githubAccessTokens);

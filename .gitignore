@@ -41,3 +41,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 .eslintcache
+
+jobs.yml
+jobs.yaml
+jobs.json
