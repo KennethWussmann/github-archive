@@ -19,9 +19,7 @@ export class GiteaApiService {
     private readonly gitHubPATs: string[],
     private readonly mirror: boolean,
     private readonly migrationItems: GiteaMigrationItem[],
-  ) {
-    this.logger.info("MIGRATION ITEMS", { migrationItems });
-  }
+  ) {}
 
   private getReposFromPath = async (path: string) => {
     let page = 1;
