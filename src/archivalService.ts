@@ -51,14 +51,10 @@ export class ArchivalService {
         count: giteaRepos.length,
       });
 
-      const nonExistentRepos = starredRepos
-        .filter(
-          (starredRepo) =>
-            !giteaRepos.some(
-              (giteaRepo) => giteaRepo.name === starredRepo.name,
-            ),
-        )
-        .slice(0, 12);
+      const nonExistentRepos = starredRepos.filter(
+        (starredRepo) =>
+          !giteaRepos.some((giteaRepo) => giteaRepo.name === starredRepo.name),
+      );
 
       this.logger.info(
         `Found ${nonExistentRepos.length} repos to archive. Beginning archival. This may take a while.`,
