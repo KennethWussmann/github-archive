@@ -13,7 +13,7 @@ The application uses the following environment variables for its configuration:
 - `GITEA_API_KEY`: The API key for Gitea. **Required.**
 - `GITEA_URL`: The URL for the Gitea instance. **Required.** (Example format: `https://gitea.example.com/api/v1`)
 - `GITEA_CREATE_PUBLIC`: Determines if the repositories should be created as public in Gitea. Defaults to `false`. Acceptable values are `true` or `false`.
-- `GITEA_MIGRATION_ITEMS`: Specifies the items to be migrated to Gitea. Defaults to "wiki,labels,issues,pull-requests,releases,milestones". Each item should be separated by a comma (,). The possible items are:
+- `GITEA_MIGRATION_ITEMS`: Specifies the items to be migrated to Gitea. Defaults to `wiki`. Each item should be separated by a comma (,). The possible items are:
 
   - `wiki`
   - `labels`
@@ -22,7 +22,7 @@ The application uses the following environment variables for its configuration:
   - `releases`
   - `milestones`
 
-  This is nullable. By default, `wiki` will be migrated. When using together with `GITEA_MIRROR=true`, only `wiki` is supported. If mirroring is disabled, all can be imported once, but won't continously mirror.
+  This is nullable. When using together with `GITEA_MIRROR=true`, only `wiki` is supported. If mirroring is disabled, all can be imported once, but won't continously mirror.
 
 - `GITEA_MIRROR`: Whether to keep the repo in sync with the upstream source. Defaults to `true`. Acceptable values are `true` or `false`.
 - `GITEA_MIRROR_INTERVAL`: The interval at which the repository should be mirrored. Defaults to `24h` (once a day).
