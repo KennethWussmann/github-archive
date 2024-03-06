@@ -7,7 +7,7 @@ This document outlines the environment variables used to configure the behavior 
 The application uses the following environment variables for its configuration:
 
 - `GITHUB_USER`: The GitHub username. **Required.**
-- `GITHUB_PAT`: Personal Access Token(s) for GitHub, separated by commas (,). Optional.
+- `GITHUB_PAT`: Personal Access Token(s) for GitHub, separated by commas (,). Will be used for polling starred repos as well as by Gitea to import data. Optional, but required if migration items other than `wiki` are specified.
 - `GITEA_ORG`: The Gitea organization name where mirrors will be created. Only one of `GITEA_ORG` or `GITEA_USER` can be specified. The org has to exist, it will not be created. Optional.
 - `GITEA_USER`: The Gitea username where mirrors will be created. Only one of `GITEA_ORG` or `GITEA_USER` can be specified. Optional.
 - `GITEA_API_KEY`: The API key for Gitea. **Required.**

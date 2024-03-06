@@ -17,7 +17,6 @@ services:
     restart: always
     environment:
       GITHUB_USER: Username
-      GITHUB_PAT: <fill-me>
       GITEA_ORG: github-archive
       GITEA_API_KEY: <fill-me>
       GITEA_URL: https://gitea.example.com/api/v1
