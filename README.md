@@ -8,7 +8,7 @@
 ## In a nutshell
 
 GitHub repos that were previously open-source sometimes get taken down. `github-archive` is a cronjob as a Docker image that will poll the repos that you starred on GitHub and will automatically create a mirror in your [Gitea](https://gitea.com/) instance.
-Gitea will download the repository and can even mirror wikis, labels, issues, pull requests, releases and milestones. It will also keep the mirror in sync as long as the source is available.
+Gitea will download the repository and can even download wikis, labels, issues, pull requests, releases and milestones. It can also keep the source code in sync as long as the upstream source is available.
 
 ## Getting Started
 
