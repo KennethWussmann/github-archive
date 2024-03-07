@@ -12,7 +12,7 @@ export class ReposJob extends Job<ReposJobDefinition> {
       this.logger.info("Archiving user repos");
       const userRepos = await this.githubApiService.getUserRepos(
         this.definition.githubSource.filter?.visibility,
-        this.definition.githubSource.filter?.type,
+        this.definition.githubSource.filter?.type ?? "owner",
       );
 
       if (userRepos.length === 0) {
