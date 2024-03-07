@@ -95,10 +95,6 @@ export class GitHubApiService {
         page,
       });
 
-      this.logger.info("GH REQUEST", {
-        url: `https://api.github.com/${this.user ? `users/${this.user}/repos` : "/user/repos"}?${new URLSearchParams(query).toString()}`,
-      });
-
       const response = await fetch(
         `https://api.github.com${this.user ? `/users/${this.user}/repos` : "/user/repos"}?${new URLSearchParams(query).toString()}`,
         {

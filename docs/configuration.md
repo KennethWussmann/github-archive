@@ -146,14 +146,12 @@ jobs:
     githubSource:
       # The user from which we want to archive:
       user: ghost
-      # We wouldn't need to configure any filters, because by default we only have access to their public repos.
-      # This below would be the default config anyways:
-      #filter:
-      #  # Only repos they own
-      #  type: owner
-      #  # Only archive public repos
-      #  visibility:
-      #    - public
+      filter:
+        # Only repos they own
+        type: owner
+        # Only archive public repos
+        visibility:
+          - public
 ```
 
 ## GitHub Access Tokens and Rate Limiting
