@@ -7,12 +7,13 @@ import {
 } from "./schema";
 import { StarredJob } from "./starredJob";
 import { type JobFileProvider } from "./jobFileProvider";
-import { config } from "../../utils/config";
-import { type GitHubApiServiceFactory } from "../github/githubApiService";
-import { type GiteaApiServiceFactory } from "../gitea/giteaApiService";
+import { config } from "../utils/config";
+import { type GitHubApiServiceFactory } from "../api/github/githubApiService";
+import { type GiteaApiServiceFactory } from "../api/gitea/giteaApiService";
+import { ReposJob } from "./reposJob";
 
 export class JobService {
-  private jobs: Job[] = [];
+  private jobs: Job<JobDefinition>[] = [];
 
   constructor(
     private readonly logger: Logger,
@@ -32,7 +33,7 @@ export class JobService {
       );
       return;
     }
-    this.logger.debug("Loaded jobs", { jobs: this.jobs });
+    this.logger.debug("Loaded jobs", { count: this.jobs.length });
   };
 
   public start = async () => {
@@ -68,20 +69,20 @@ export class JobService {
     definition: JobDefinition,
   ): GiteaMirrorSettings => ({
     accessToken:
-      jobsFile.giteaDestination.accessToken ??
+      jobsFile.giteaDestination?.accessToken ??
       definition.giteaDestination?.accessToken,
     interval:
       definition.giteaDestination?.interval ??
-      jobsFile.giteaDestination.interval,
+      jobsFile.giteaDestination?.interval,
     items:
-      definition.giteaDestination?.items ?? jobsFile.giteaDestination.items,
+      definition.giteaDestination?.items ?? jobsFile.giteaDestination?.items,
     mirror:
-      definition.giteaDestination?.mirror ?? jobsFile.giteaDestination.mirror,
-    org: definition.giteaDestination?.org ?? jobsFile.giteaDestination.org,
+      definition.giteaDestination?.mirror ?? jobsFile.giteaDestination?.mirror,
+    org: definition.giteaDestination?.org ?? jobsFile.giteaDestination?.org,
     public:
-      definition.giteaDestination?.public ?? jobsFile.giteaDestination.public,
-    url: definition.giteaDestination?.url ?? jobsFile.giteaDestination.url,
-    user: definition.giteaDestination?.user ?? jobsFile.giteaDestination.user,
+      definition.giteaDestination?.public ?? jobsFile.giteaDestination?.public,
+    url: definition.giteaDestination?.url ?? jobsFile.giteaDestination?.url,
+    user: definition.giteaDestination?.user ?? jobsFile.giteaDestination?.user,
   });
 
   private getGitHubAccessTokens = (
@@ -93,22 +94,33 @@ export class JobService {
 
     return (
       asArray(definition.githubSource.accessTokens) ??
-      asArray(jobsFile.githubSource.accessTokens) ??
+      asArray(jobsFile.githubSource?.accessTokens) ??
       []
     );
   };
 
   private createJob = (jobsFile: JobFile, definition: JobDefinition) => {
-    if (definition.type === "starred") {
-      return new StarredJob(
-        this.logger.child({ job: definition.name, name: "StarredJob" }),
-        this.githubApiServiceFactory,
-        this.giteaApiServiceFactory,
-        definition,
-        this.getMirrorSettings(jobsFile, definition),
-        this.getGitHubAccessTokens(jobsFile, definition),
-      );
+    switch (definition.type) {
+      case "starred":
+        return new StarredJob(
+          this.logger.child({ job: definition.name, name: "StarredJob" }),
+          this.githubApiServiceFactory,
+          this.giteaApiServiceFactory,
+          definition,
+          this.getMirrorSettings(jobsFile, definition),
+          this.getGitHubAccessTokens(jobsFile, definition),
+        );
+      case "repos":
+        return new ReposJob(
+          this.logger.child({ job: definition.name, name: "ReposJob" }),
+          this.githubApiServiceFactory,
+          this.giteaApiServiceFactory,
+          definition,
+          this.getMirrorSettings(jobsFile, definition),
+          this.getGitHubAccessTokens(jobsFile, definition),
+        );
+      default:
+        throw new Error("Unsupported job type");
     }
-    throw new Error("Unsupported job type");
   };
 }

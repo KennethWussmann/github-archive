@@ -2,15 +2,15 @@ import { type Logger } from "winston";
 import {
   type GiteaApiService,
   type GiteaApiServiceFactory,
-} from "../gitea/giteaApiService";
+} from "../api/gitea/giteaApiService";
 import {
   type GitHubApiService,
   type GitHubApiServiceFactory,
-} from "../github/githubApiService";
+} from "../api/github/githubApiService";
 import { type GiteaMirrorSettings, type JobDefinition } from "./schema";
 import { schedule } from "node-cron";
 
-export abstract class Job {
+export abstract class Job<T extends JobDefinition> {
   protected readonly githubApiService: GitHubApiService;
   protected readonly giteaApiService: GiteaApiService;
   protected importInProgress = false;
@@ -22,7 +22,7 @@ export abstract class Job {
     protected readonly logger: Logger,
     readonly githubApiServiceFactory: GitHubApiServiceFactory,
     readonly giteaApiServiceFactory: GiteaApiServiceFactory,
-    public readonly definition: JobDefinition,
+    public readonly definition: T,
     protected readonly mirrorSettings: GiteaMirrorSettings,
     protected readonly githubAccessTokens: string[],
   ) {

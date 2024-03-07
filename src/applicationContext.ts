@@ -1,7 +1,7 @@
 import { defaultGiteaApiServiceFactory } from "./api/gitea/giteaApiService";
 import { defaultGitHubApiServiceFactory } from "./api/github/githubApiService";
-import { fileSystemJobFileProvider } from "./api/jobs/jobFileProvider";
-import { JobService } from "./api/jobs/jobService";
+import { fileSystemJobFileProvider } from "./jobs/jobFileProvider";
+import { JobService } from "./jobs/jobService";
 import { config } from "./utils/config";
 import { createLogger } from "./utils/logger";
 

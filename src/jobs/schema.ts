@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { repoTypeFilter, repoVisibility } from "../api/github/schema";
 
 export const giteaMigrationItem = z.union([
   z.literal("wiki"),
@@ -46,15 +47,32 @@ const starredJob = baseJob.merge(
     }),
   }),
 );
+const reposJob = baseJob.merge(
+  z.object({
+    type: z.literal("repos"),
+    githubSource: z.object({
+      accessTokens: z.array(z.string()).or(z.string()).optional(),
+      user: z.string().optional(),
+      filter: z
+        .object({
+          type: repoTypeFilter.optional(),
+          visibility: z.array(repoVisibility).optional(),
+        })
+        .optional(),
+    }),
+  }),
+);
 
-const job = z.discriminatedUnion("type", [starredJob]);
+const job = z.discriminatedUnion("type", [starredJob, reposJob]);
 
+export type ReposJobDefinition = z.infer<typeof reposJob>;
+export type StarredJobDefinition = z.infer<typeof starredJob>;
 export type JobDefinition = z.infer<typeof job>;
 
 export const jobsFile = z.object({
   $schema: z.string().optional(),
-  githubSource: githubCredentials,
-  giteaDestination: giteaMirrorSettings,
+  githubSource: githubCredentials.optional(),
+  giteaDestination: giteaMirrorSettings.optional(),
   jobs: z.array(job),
 });
 
