@@ -5,7 +5,7 @@ import {
   type CreateRepoMirrorRequest,
 } from "./schema";
 import { type GitHubRepo } from "../github/schema";
-import { type GiteaMirrorSettings } from "../jobs/schema";
+import { type GiteaMirrorSettings } from "../../jobs/schema";
 
 export class GiteaApiService {
   constructor(

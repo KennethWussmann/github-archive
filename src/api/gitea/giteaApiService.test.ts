@@ -3,7 +3,7 @@ import { testLogger } from "../../../test/testLogger";
 import nock from "nock";
 import { GiteaApiService } from "./giteaApiService";
 import { type CreateRepoMirrorRequest, type GiteaRepo } from "./schema";
-import { type GiteaMirrorSettings } from "../jobs/schema";
+import { type GiteaMirrorSettings } from "../../jobs/schema";
 
 describe("GiteaApiService", () => {
   it("should get repos from all pages of org", async () => {
@@ -209,6 +209,7 @@ describe("GiteaApiService", () => {
         description: "A test repo",
         full_name: "someuser/repo",
         name: "repo",
+        visibility: "public",
       });
 
       scope.done();

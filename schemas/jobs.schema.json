@@ -123,12 +123,77 @@
             },
             "required": ["name", "githubSource", "type"],
             "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "$ref": "#/properties/jobs/items/anyOf/0/properties/name"
+              },
+              "description": {
+                "$ref": "#/properties/jobs/items/anyOf/0/properties/description"
+              },
+              "active": {
+                "$ref": "#/properties/jobs/items/anyOf/0/properties/active"
+              },
+              "githubSource": {
+                "type": "object",
+                "properties": {
+                  "accessTokens": {
+                    "anyOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "user": {
+                    "type": "string"
+                  },
+                  "filter": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": ["all", "owner", "public", "private", "member"]
+                      },
+                      "visibility": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": ["public", "private"]
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              },
+              "giteaDestination": {
+                "$ref": "#/properties/jobs/items/anyOf/0/properties/giteaDestination"
+              },
+              "schedule": {
+                "$ref": "#/properties/jobs/items/anyOf/0/properties/schedule"
+              },
+              "type": {
+                "type": "string",
+                "const": "repos"
+              }
+            },
+            "required": ["name", "githubSource", "type"],
+            "additionalProperties": false
           }
         ]
       }
     }
   },
-  "required": ["githubSource", "giteaDestination", "jobs"],
+  "required": ["jobs"],
   "additionalProperties": false,
   "$schema": "http://json-schema.org/draft-07/schema#"
 }

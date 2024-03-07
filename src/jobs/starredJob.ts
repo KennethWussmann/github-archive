@@ -1,6 +1,7 @@
 import { Job } from "./job";
+import { type StarredJobDefinition } from "./schema";
 
-export class StarredJob extends Job {
+export class StarredJob extends Job<StarredJobDefinition> {
   run = async () => {
     if (this.importInProgress) {
       this.logger.info("Import already in progress");
@@ -25,14 +26,10 @@ export class StarredJob extends Job {
         count: giteaRepos.length,
       });
 
-      const nonExistentRepos = starredRepos
-        .filter(
-          (starredRepo) =>
-            !giteaRepos.some(
-              (giteaRepo) => giteaRepo.name === starredRepo.name,
-            ),
-        )
-        .slice(0, 1);
+      const nonExistentRepos = starredRepos.filter(
+        (starredRepo) =>
+          !giteaRepos.some((giteaRepo) => giteaRepo.name === starredRepo.name),
+      );
 
       this.logger.info(
         `Found ${nonExistentRepos.length} repos to archive. Beginning archival. This may take a while.`,

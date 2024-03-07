@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vitest } from "vitest";
 import { JobService } from "./jobService";
-import { testLogger } from "../../../test/testLogger";
+import { testLogger } from "../../test/testLogger";
 import { mock, mockReset } from "vitest-mock-extended";
-import { type GitHubApiService } from "../github/githubApiService";
-import { type GiteaApiService } from "../gitea/giteaApiService";
-import { type GitHubRepo } from "../github/schema";
+import { type GitHubApiService } from "../api/github/githubApiService";
+import { type GiteaApiService } from "../api/gitea/giteaApiService";
+import { type GitHubRepo } from "../api/github/schema";
 import { Logger } from "winston";
 import { type GiteaMirrorSettings } from "./schema";
 
@@ -44,6 +44,13 @@ const service = new JobService(
           public: true,
         },
       },
+      {
+        type: "repos",
+        name: "test",
+        githubSource: {
+          user: "someone",
+        },
+      },
     ],
   }),
   mockGitHubApiServiceFactory,
@@ -56,6 +63,7 @@ const testRepo: GitHubRepo = {
   full_name: "user/repo",
   name: "repo",
   description: "A test repo",
+  visibility: "public",
 };
 
 describe("JobService", () => {
@@ -107,6 +115,7 @@ describe("JobService", () => {
       ["test"],
     );
     expect(mockGitHubApiService.getStarredRepos).toHaveBeenCalledTimes(2);
+    expect(mockGitHubApiService.getUserRepos).toHaveBeenCalledTimes(1);
     expect(mockGiteaApiService.getRepos).toHaveBeenCalledTimes(2);
     expect(mockGiteaApiService.createRepoMirror).toHaveBeenCalledWith(testRepo);
   });
@@ -123,6 +132,7 @@ describe("JobService", () => {
     await service.runAllJobs();
 
     expect(mockGitHubApiService.getStarredRepos).toHaveBeenCalledTimes(2);
+    expect(mockGitHubApiService.getUserRepos).toHaveBeenCalledTimes(1);
     expect(mockGiteaApiService.getRepos).toHaveBeenCalledTimes(2);
     expect(mockGiteaApiService.createRepoMirror).not.toHaveBeenCalled();
   });
