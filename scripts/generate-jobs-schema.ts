@@ -1,5 +1,5 @@
-import { writeFile } from "fs/promises";
-import { join } from "path";
+import { writeFile } from "node:fs/promises";
+import { join } from "node:path";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { jobsFile } from "../src/jobs/schema";
 

@@ -1,9 +1,9 @@
-import { type Logger } from "winston";
-import { fileExists } from "../utils/fileUtils";
-import { defaultJobFile, jobsFile, type JobFile } from "./schema";
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
+import type { Logger } from "winston";
 import * as YAML from "yaml";
 import { config } from "../utils/config";
+import { fileExists } from "../utils/fileUtils";
+import { defaultJobFile, type JobFile, jobsFile } from "./schema";
 
 export type JobFileProvider = (logger: Logger) => Promise<JobFile> | JobFile;
 

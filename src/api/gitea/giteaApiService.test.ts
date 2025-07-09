@@ -1,9 +1,9 @@
+import nock from "nock";
 import { describe, expect, it } from "vitest";
 import { testLogger } from "../../../test/testLogger";
-import nock from "nock";
+import type { GiteaMirrorSettings } from "../../jobs/schema";
 import { GiteaApiService } from "./giteaApiService";
-import { type CreateRepoMirrorRequest, type GiteaRepo } from "./schema";
-import { type GiteaMirrorSettings } from "../../jobs/schema";
+import type { CreateRepoMirrorRequest, GiteaRepo } from "./schema";
 
 describe("GiteaApiService", () => {
   it("should get repos from all pages of org", async () => {

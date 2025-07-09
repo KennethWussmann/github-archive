@@ -1,5 +1,5 @@
 import { Job } from "./job";
-import { type ReposJobDefinition } from "./schema";
+import type { ReposJobDefinition } from "./schema";
 
 export class ReposJob extends Job<ReposJobDefinition> {
   run = async () => {

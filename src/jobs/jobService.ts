@@ -1,16 +1,12 @@
-import { type Logger } from "winston";
-import { type Job } from "./job";
-import {
-  type JobFile,
-  type JobDefinition,
-  type GiteaMirrorSettings,
-} from "./schema";
-import { StarredJob } from "./starredJob";
-import { type JobFileProvider } from "./jobFileProvider";
+import type { Logger } from "winston";
+import type { GiteaApiServiceFactory } from "../api/gitea/giteaApiService";
+import type { GitHubApiServiceFactory } from "../api/github/githubApiService";
 import { config } from "../utils/config";
-import { type GitHubApiServiceFactory } from "../api/github/githubApiService";
-import { type GiteaApiServiceFactory } from "../api/gitea/giteaApiService";
+import type { Job } from "./job";
+import type { JobFileProvider } from "./jobFileProvider";
 import { ReposJob } from "./reposJob";
+import type { GiteaMirrorSettings, JobDefinition, JobFile } from "./schema";
+import { StarredJob } from "./starredJob";
 
 export class JobService {
   private jobs: Job<JobDefinition>[] = [];

@@ -1,11 +1,11 @@
-import { type Logger } from "winston";
+import type { Logger } from "winston";
+import type { GiteaMirrorSettings } from "../../jobs/schema";
+import type { GitHubRepo } from "../github/schema";
 import {
-  repoListResponse,
-  type GiteaRepo,
   type CreateRepoMirrorRequest,
+  type GiteaRepo,
+  repoListResponse,
 } from "./schema";
-import { type GitHubRepo } from "../github/schema";
-import { type GiteaMirrorSettings } from "../../jobs/schema";
 
 export class GiteaApiService {
   constructor(

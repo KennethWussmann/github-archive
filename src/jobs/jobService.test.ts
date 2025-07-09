@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vitest } from "vitest";
-import { JobService } from "./jobService";
-import { testLogger } from "../../test/testLogger";
 import { mock, mockReset } from "vitest-mock-extended";
-import { type GitHubApiService } from "../api/github/githubApiService";
-import { type GiteaApiService } from "../api/gitea/giteaApiService";
-import { type GitHubRepo } from "../api/github/schema";
 import { Logger } from "winston";
-import { type GiteaMirrorSettings } from "./schema";
+import { testLogger } from "../../test/testLogger";
+import type { GiteaApiService } from "../api/gitea/giteaApiService";
+import type { GitHubApiService } from "../api/github/githubApiService";
+import type { GitHubRepo } from "../api/github/schema";
+import { JobService } from "./jobService";
+import type { GiteaMirrorSettings } from "./schema";
 
 const mockGitHubApiService = mock<GitHubApiService>();
 const mockGitHubApiServiceFactory = vitest.fn(() => mockGitHubApiService);

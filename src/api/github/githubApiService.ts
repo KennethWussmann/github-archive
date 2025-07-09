@@ -1,9 +1,9 @@
-import { type Logger } from "winston";
+import type { Logger } from "winston";
 import {
-  repoListResponse,
   type GitHubRepo,
-  type RepoVisibility,
   type RepoTypeFilter,
+  type RepoVisibility,
+  repoListResponse,
 } from "./schema";
 
 export class GitHubApiService {
