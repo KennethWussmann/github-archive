@@ -1,17 +1,15 @@
 ARG NODE_VERSION=22
 FROM node:${NODE_VERSION}-slim AS builder
 
-RUN apt-get update && apt-get install -y python3 build-essential
-
 WORKDIR /app
 
 COPY . .
 
-RUN npm install -g pnpm@8
+RUN corepack enable
 RUN pnpm install --frozen-lockfile
 RUN pnpm build
 
-FROM node:${NODE_VERSION}-slim 
+FROM gcr.io/distroless/nodejs${NODE_VERSION}
 
 WORKDIR /app
 
