@@ -1,9 +1,9 @@
-import { type Logger } from "winston";
+import type { Logger } from "winston";
 import {
-  repoListResponse,
   type GitHubRepo,
-  type RepoVisibility,
   type RepoTypeFilter,
+  type RepoVisibility,
+  repoListResponse,
 } from "./schema";
 
 export class GitHubApiService {
@@ -46,13 +46,10 @@ export class GitHubApiService {
           break;
         }
 
-        this.logger.error(
-          `Failed to fetch starred repos for user ${this.user}`,
-          {
-            status: response.status,
-            response: await response.text(),
-          },
-        );
+        this.logger.error(`Failed to fetch starred repos for user ${this.user}`, {
+          status: response.status,
+          response: await response.text(),
+        });
         break;
       }
 
@@ -142,8 +139,5 @@ export type GitHubApiServiceFactory = (
   user: string | undefined,
 ) => GitHubApiService;
 
-export const defaultGitHubApiServiceFactory: GitHubApiServiceFactory = (
-  logger,
-  pat,
-  user,
-) => new GitHubApiService(logger, pat, user);
+export const defaultGitHubApiServiceFactory: GitHubApiServiceFactory = (logger, pat, user) =>
+  new GitHubApiService(logger, pat, user);

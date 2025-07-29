@@ -1,9 +1,9 @@
+import nock from "nock";
 import { describe, expect, it } from "vitest";
 import { testLogger } from "../../../test/testLogger";
-import nock from "nock";
+import type { GiteaMirrorSettings } from "../../jobs/schema";
 import { GiteaApiService } from "./giteaApiService";
-import { type CreateRepoMirrorRequest, type GiteaRepo } from "./schema";
-import { type GiteaMirrorSettings } from "../../jobs/schema";
+import type { CreateRepoMirrorRequest, GiteaRepo } from "./schema";
 
 describe("GiteaApiService", () => {
   it("should get repos from all pages of org", async () => {
@@ -155,14 +155,7 @@ describe("GiteaApiService", () => {
         accessToken: "gitea-token",
         interval: "24h",
         url: "https://example.com",
-        items: [
-          "wiki",
-          "issues",
-          "labels",
-          "milestones",
-          "releases",
-          "pull-requests",
-        ],
+        items: ["wiki", "issues", "labels", "milestones", "releases", "pull-requests"],
         mirror: false,
         org: "github-archive",
         public: false,
@@ -187,14 +180,8 @@ describe("GiteaApiService", () => {
     ],
   ] satisfies [GiteaMirrorSettings, CreateRepoMirrorRequest][])(
     "should create mirror from GitHubRepo",
-    async (
-      mirrorSettings: GiteaMirrorSettings,
-      expectedRequest: CreateRepoMirrorRequest,
-    ) => {
-      const service = new GiteaApiService(testLogger, mirrorSettings, [
-        "gh-token-1",
-        "gh-token-2",
-      ]);
+    async (mirrorSettings: GiteaMirrorSettings, expectedRequest: CreateRepoMirrorRequest) => {
+      const service = new GiteaApiService(testLogger, mirrorSettings, ["gh-token-1", "gh-token-2"]);
       const scope = nock("https://example.com");
 
       scope

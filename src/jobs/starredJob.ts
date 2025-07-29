@@ -1,5 +1,5 @@
 import { Job } from "./job";
-import { type StarredJobDefinition } from "./schema";
+import type { StarredJobDefinition } from "./schema";
 
 export class StarredJob extends Job<StarredJobDefinition> {
   run = async () => {
@@ -27,8 +27,7 @@ export class StarredJob extends Job<StarredJobDefinition> {
       });
 
       const nonExistentRepos = starredRepos.filter(
-        (starredRepo) =>
-          !giteaRepos.some((giteaRepo) => giteaRepo.name === starredRepo.name),
+        (starredRepo) => !giteaRepos.some((giteaRepo) => giteaRepo.name === starredRepo.name),
       );
 
       this.logger.info(

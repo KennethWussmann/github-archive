@@ -1,16 +1,12 @@
-import { type Logger } from "winston";
-import { type Job } from "./job";
-import {
-  type JobFile,
-  type JobDefinition,
-  type GiteaMirrorSettings,
-} from "./schema";
-import { StarredJob } from "./starredJob";
-import { type JobFileProvider } from "./jobFileProvider";
+import type { Logger } from "winston";
+import type { GiteaApiServiceFactory } from "../api/gitea/giteaApiService";
+import type { GitHubApiServiceFactory } from "../api/github/githubApiService";
 import { config } from "../utils/config";
-import { type GitHubApiServiceFactory } from "../api/github/githubApiService";
-import { type GiteaApiServiceFactory } from "../api/gitea/giteaApiService";
+import type { Job } from "./job";
+import type { JobFileProvider } from "./jobFileProvider";
 import { ReposJob } from "./reposJob";
+import type { GiteaMirrorSettings, JobDefinition, JobFile } from "./schema";
+import { StarredJob } from "./starredJob";
 
 export class JobService {
   private jobs: Job<JobDefinition>[] = [];
@@ -28,9 +24,7 @@ export class JobService {
       .filter((job) => job.active ?? true)
       .map((definition) => this.createJob(jobFile, definition));
     if (this.jobs.length === 0) {
-      this.logger.warn(
-        `No jobs loaded. Configure jobs in ${config.JOBS_FILE_PATH} and restart.`,
-      );
+      this.logger.warn(`No jobs loaded. Configure jobs in ${config.JOBS_FILE_PATH} and restart.`);
       return;
     }
     this.logger.debug("Loaded jobs", { count: this.jobs.length });
@@ -68,27 +62,17 @@ export class JobService {
     jobsFile: JobFile,
     definition: JobDefinition,
   ): GiteaMirrorSettings => ({
-    accessToken:
-      jobsFile.giteaDestination?.accessToken ??
-      definition.giteaDestination?.accessToken,
-    interval:
-      definition.giteaDestination?.interval ??
-      jobsFile.giteaDestination?.interval,
-    items:
-      definition.giteaDestination?.items ?? jobsFile.giteaDestination?.items,
-    mirror:
-      definition.giteaDestination?.mirror ?? jobsFile.giteaDestination?.mirror,
+    accessToken: jobsFile.giteaDestination?.accessToken ?? definition.giteaDestination?.accessToken,
+    interval: definition.giteaDestination?.interval ?? jobsFile.giteaDestination?.interval,
+    items: definition.giteaDestination?.items ?? jobsFile.giteaDestination?.items,
+    mirror: definition.giteaDestination?.mirror ?? jobsFile.giteaDestination?.mirror,
     org: definition.giteaDestination?.org ?? jobsFile.giteaDestination?.org,
-    public:
-      definition.giteaDestination?.public ?? jobsFile.giteaDestination?.public,
+    public: definition.giteaDestination?.public ?? jobsFile.giteaDestination?.public,
     url: definition.giteaDestination?.url ?? jobsFile.giteaDestination?.url,
     user: definition.giteaDestination?.user ?? jobsFile.giteaDestination?.user,
   });
 
-  private getGitHubAccessTokens = (
-    jobsFile: JobFile,
-    definition: JobDefinition,
-  ): string[] => {
+  private getGitHubAccessTokens = (jobsFile: JobFile, definition: JobDefinition): string[] => {
     const asArray = (tokens: string | string[] | undefined) =>
       tokens ? (Array.isArray(tokens) ? tokens : [tokens]) : undefined;
 

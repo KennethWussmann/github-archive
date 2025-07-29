@@ -1,4 +1,4 @@
-ARG NODE_VERSION=20
+ARG NODE_VERSION=22
 FROM node:${NODE_VERSION}-slim AS builder
 
 RUN apt-get update && apt-get install -y python3 build-essential

@@ -50,11 +50,5 @@ export const createLogger = ({
             zippedArchive: true,
           })
         : undefined,
-    ].filter(
-      (
-        t,
-      ): t is
-        | InstanceType<typeof winston.transports.Console>
-        | DailyRotateFile => !!t,
-    ),
+    ].filter((t): t is InstanceType<typeof winston.transports.Console> | DailyRotateFile => !!t),
   });

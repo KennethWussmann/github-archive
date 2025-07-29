@@ -1,14 +1,8 @@
-import { type Logger } from "winston";
-import {
-  type GiteaApiService,
-  type GiteaApiServiceFactory,
-} from "../api/gitea/giteaApiService";
-import {
-  type GitHubApiService,
-  type GitHubApiServiceFactory,
-} from "../api/github/githubApiService";
-import { type GiteaMirrorSettings, type JobDefinition } from "./schema";
 import { schedule } from "node-cron";
+import type { Logger } from "winston";
+import type { GiteaApiService, GiteaApiServiceFactory } from "../api/gitea/giteaApiService";
+import type { GitHubApiService, GitHubApiServiceFactory } from "../api/github/githubApiService";
+import type { GiteaMirrorSettings, JobDefinition } from "./schema";
 
 export abstract class Job<T extends JobDefinition> {
   protected readonly githubApiService: GitHubApiService;
