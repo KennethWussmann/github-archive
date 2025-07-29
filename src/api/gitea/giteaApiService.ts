@@ -1,11 +1,7 @@
-import { type Logger } from "winston";
-import {
-  repoListResponse,
-  type GiteaRepo,
-  type CreateRepoMirrorRequest,
-} from "./schema";
-import { type GitHubRepo } from "../github/schema";
-import { type GiteaMirrorSettings } from "../../jobs/schema";
+import type { Logger } from "winston";
+import type { GiteaMirrorSettings } from "../../jobs/schema";
+import type { GitHubRepo } from "../github/schema";
+import { type CreateRepoMirrorRequest, type GiteaRepo, repoListResponse } from "./schema";
 
 export class GiteaApiService {
   constructor(
@@ -81,12 +77,9 @@ export class GiteaApiService {
       private: !this.settings.public,
       issues: this.settings.items?.some((item) => item === "issues") ?? false,
       labels: this.settings.items?.some((item) => item === "labels") ?? false,
-      milestones:
-        this.settings.items?.some((item) => item === "milestones") ?? false,
-      releases:
-        this.settings.items?.some((item) => item === "releases") ?? false,
-      pull_requests:
-        this.settings.items?.some((item) => item === "pull-requests") ?? false,
+      milestones: this.settings.items?.some((item) => item === "milestones") ?? false,
+      releases: this.settings.items?.some((item) => item === "releases") ?? false,
+      pull_requests: this.settings.items?.some((item) => item === "pull-requests") ?? false,
       wiki: this.settings.items?.some((item) => item === "wiki") ?? false,
     };
     this.logger.debug(`Creating repo mirror`, {

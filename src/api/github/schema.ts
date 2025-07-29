@@ -7,10 +7,7 @@ export const repoTypeFilter = z.union([
   z.literal("private"),
   z.literal("member"),
 ]);
-export const repoVisibility = z.union([
-  z.literal("public"),
-  z.literal("private"),
-]);
+export const repoVisibility = z.union([z.literal("public"), z.literal("private")]);
 const repo = z.object({
   id: z.number(),
   name: z.string(),

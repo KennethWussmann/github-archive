@@ -1,15 +1,13 @@
-import { type Logger } from "winston";
-import { fileExists } from "../utils/fileUtils";
-import { defaultJobFile, jobsFile, type JobFile } from "./schema";
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
+import type { Logger } from "winston";
 import * as YAML from "yaml";
 import { config } from "../utils/config";
+import { fileExists } from "../utils/fileUtils";
+import { defaultJobFile, type JobFile, jobsFile } from "./schema";
 
 export type JobFileProvider = (logger: Logger) => Promise<JobFile> | JobFile;
 
-export const fileSystemJobFileProvider: JobFileProvider = async (
-  logger: Logger,
-) => {
+export const fileSystemJobFileProvider: JobFileProvider = async (logger: Logger) => {
   const filePath = config.JOBS_FILE_PATH;
   if (!(await fileExists(filePath))) {
     logger.warn(`No jobs file found at ${filePath}. Creating default file.`);
@@ -27,10 +25,7 @@ export const fileSystemJobFileProvider: JobFileProvider = async (
     const jobs = jobsFile.parse(JSON.parse(content));
     logger.debug("Parsed jobs file", { jobs });
     return jobs;
-  } else if (
-    filePath.toLowerCase().endsWith(".yaml") ||
-    filePath.toLowerCase().endsWith(".yml")
-  ) {
+  } else if (filePath.toLowerCase().endsWith(".yaml") || filePath.toLowerCase().endsWith(".yml")) {
     const jobs = jobsFile.parse(YAML.parse(content));
     logger.debug("Parsed jobs file", { jobs });
     return jobs;

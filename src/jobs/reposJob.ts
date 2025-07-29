@@ -1,5 +1,5 @@
 import { Job } from "./job";
-import { type ReposJobDefinition } from "./schema";
+import type { ReposJobDefinition } from "./schema";
 
 export class ReposJob extends Job<ReposJobDefinition> {
   run = async () => {
@@ -30,8 +30,7 @@ export class ReposJob extends Job<ReposJobDefinition> {
       });
 
       const nonExistentRepos = userRepos.filter(
-        (starredRepo) =>
-          !giteaRepos.some((giteaRepo) => giteaRepo.name === starredRepo.name),
+        (starredRepo) => !giteaRepos.some((giteaRepo) => giteaRepo.name === starredRepo.name),
       );
 
       if (nonExistentRepos.length === 0) {

@@ -1,8 +1,8 @@
+import nock from "nock";
 import { describe, expect, it } from "vitest";
 import { testLogger } from "../../../test/testLogger";
 import { GitHubApiService } from "./githubApiService";
-import nock from "nock";
-import { type GitHubRepo } from "./schema";
+import type { GitHubRepo } from "./schema";
 
 const service = new GitHubApiService(testLogger, "token", "someone");
 const serviceWithoutUser = new GitHubApiService(testLogger, "token", undefined);
