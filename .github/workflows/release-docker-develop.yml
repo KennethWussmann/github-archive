@@ -26,7 +26,7 @@ jobs:
     outputs:
       SHORT_SHA: ${{ steps.git-commit.outputs.SHORT_SHA }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Get git commit
         id: git-commit
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> "$GITHUB_OUTPUT"
@@ -44,7 +44,7 @@ jobs:
       contents: read
     steps:
       - name: Login to GitHub Packages Docker Registry
-        uses: docker/login-action@v3.4.0
+        uses: docker/login-action@v3.6.0
         with:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
