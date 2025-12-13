@@ -1,4 +1,364 @@
 {
-  "type": "string",
-  "$schema": "http://json-schema.org/draft-07/schema#"
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "githubSource": {
+      "type": "object",
+      "properties": {
+        "accessTokens": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": ["accessTokens"],
+      "additionalProperties": false
+    },
+    "giteaDestination": {
+      "type": "object",
+      "properties": {
+        "org": {
+          "type": "string"
+        },
+        "user": {
+          "type": "string"
+        },
+        "accessToken": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "mirror": {
+          "default": true,
+          "type": "boolean"
+        },
+        "public": {
+          "default": false,
+          "type": "boolean"
+        },
+        "items": {
+          "default": ["wiki"],
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "wiki"
+              },
+              {
+                "type": "string",
+                "const": "labels"
+              },
+              {
+                "type": "string",
+                "const": "issues"
+              },
+              {
+                "type": "string",
+                "const": "pull-requests"
+              },
+              {
+                "type": "string",
+                "const": "releases"
+              },
+              {
+                "type": "string",
+                "const": "milestones"
+              }
+            ]
+          }
+        },
+        "interval": {
+          "default": "24h",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "jobs": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "active": {
+                "default": true,
+                "type": "boolean"
+              },
+              "githubSource": {
+                "type": "object",
+                "properties": {
+                  "accessTokens": {
+                    "anyOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "user": {
+                    "type": "string"
+                  }
+                },
+                "required": ["user"],
+                "additionalProperties": false
+              },
+              "giteaDestination": {
+                "type": "object",
+                "properties": {
+                  "org": {
+                    "type": "string"
+                  },
+                  "user": {
+                    "type": "string"
+                  },
+                  "accessToken": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "mirror": {
+                    "default": true,
+                    "type": "boolean"
+                  },
+                  "public": {
+                    "default": false,
+                    "type": "boolean"
+                  },
+                  "items": {
+                    "default": ["wiki"],
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "const": "wiki"
+                        },
+                        {
+                          "type": "string",
+                          "const": "labels"
+                        },
+                        {
+                          "type": "string",
+                          "const": "issues"
+                        },
+                        {
+                          "type": "string",
+                          "const": "pull-requests"
+                        },
+                        {
+                          "type": "string",
+                          "const": "releases"
+                        },
+                        {
+                          "type": "string",
+                          "const": "milestones"
+                        }
+                      ]
+                    }
+                  },
+                  "interval": {
+                    "default": "24h",
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "schedule": {
+                "default": "0 0 * * *",
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "const": "starred"
+              }
+            },
+            "required": ["name", "githubSource", "type"],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "active": {
+                "default": true,
+                "type": "boolean"
+              },
+              "githubSource": {
+                "type": "object",
+                "properties": {
+                  "accessTokens": {
+                    "anyOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "user": {
+                    "type": "string"
+                  },
+                  "filter": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "const": "all"
+                          },
+                          {
+                            "type": "string",
+                            "const": "owner"
+                          },
+                          {
+                            "type": "string",
+                            "const": "public"
+                          },
+                          {
+                            "type": "string",
+                            "const": "private"
+                          },
+                          {
+                            "type": "string",
+                            "const": "member"
+                          }
+                        ]
+                      },
+                      "visibility": {
+                        "type": "array",
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "const": "public"
+                            },
+                            {
+                              "type": "string",
+                              "const": "private"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              },
+              "giteaDestination": {
+                "type": "object",
+                "properties": {
+                  "org": {
+                    "type": "string"
+                  },
+                  "user": {
+                    "type": "string"
+                  },
+                  "accessToken": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "mirror": {
+                    "default": true,
+                    "type": "boolean"
+                  },
+                  "public": {
+                    "default": false,
+                    "type": "boolean"
+                  },
+                  "items": {
+                    "default": ["wiki"],
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "const": "wiki"
+                        },
+                        {
+                          "type": "string",
+                          "const": "labels"
+                        },
+                        {
+                          "type": "string",
+                          "const": "issues"
+                        },
+                        {
+                          "type": "string",
+                          "const": "pull-requests"
+                        },
+                        {
+                          "type": "string",
+                          "const": "releases"
+                        },
+                        {
+                          "type": "string",
+                          "const": "milestones"
+                        }
+                      ]
+                    }
+                  },
+                  "interval": {
+                    "default": "24h",
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "schedule": {
+                "default": "0 0 * * *",
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "const": "repos"
+              }
+            },
+            "required": ["name", "githubSource", "type"],
+            "additionalProperties": false
+          }
+        ]
+      }
+    }
+  },
+  "required": ["jobs"],
+  "additionalProperties": false
 }

@@ -36,7 +36,9 @@ export class JobService {
       this.logger.warn("No jobs to start");
       return;
     }
-    this.jobs.forEach((job) => job.start());
+    for (const job of this.jobs) {
+      job.start();
+    }
     this.logger.info("Started all jobs");
   };
 
@@ -45,7 +47,9 @@ export class JobService {
       this.logger.warn("No jobs to stop");
       return;
     }
-    this.jobs.forEach((job) => job.stop());
+    for (const job of this.jobs) {
+      job.stop();
+    }
     this.logger.info("Stopped all jobs");
   };
 
