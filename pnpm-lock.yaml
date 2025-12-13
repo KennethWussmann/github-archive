@@ -66,9 +66,6 @@ importers:
       vitest-mock-extended:
         specifier: ^3.1.0
         version: 3.1.0(typescript@5.9.3)(vitest@4.0.15(@types/node@25.0.1)(tsx@4.21.0)(yaml@2.8.2))
-      zod-to-json-schema:
-        specifier: ^3.25.0
-        version: 3.25.0(zod@4.1.13)
       zx:
         specifier: ^8.8.5
         version: 8.8.5
@@ -1087,11 +1084,6 @@ packages:
     engines: {node: '>= 14.6'}
     hasBin: true
 
-  zod-to-json-schema@3.25.0:
-    resolution: {integrity: sha512-HvWtU2UG41LALjajJrML6uQejQhNJx+JBO9IflpSja4R03iNWfKXrj6W2h7ljuLyc1nKS+9yDyL/9tD1U/yBnQ==}
-    peerDependencies:
-      zod: ^3.25 || ^4
-
   zod@4.1.13:
     resolution: {integrity: sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==}
 
@@ -1900,10 +1892,6 @@ snapshots:
       strip-ansi: 7.1.0
 
   yaml@2.8.2: {}
-
-  zod-to-json-schema@3.25.0(zod@4.1.13):
-    dependencies:
-      zod: 4.1.13
 
   zod@4.1.13: {}
 
