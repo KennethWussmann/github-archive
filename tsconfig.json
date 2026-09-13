@@ -13,12 +13,11 @@
     "types": ["node", "vitest"],
     "incremental": true,
     "target": "es2019",
-    "module": "commonjs",
+    "module": "node20",
     "sourceMap": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
