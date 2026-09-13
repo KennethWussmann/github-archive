@@ -178,28 +178,28 @@ describe("GiteaApiService", () => {
         wiki: true,
       },
     ],
-  ] satisfies [
-    GiteaMirrorSettings,
-    CreateRepoMirrorRequest,
-  ][])("should create mirror from GitHubRepo", async (mirrorSettings: GiteaMirrorSettings, expectedRequest: CreateRepoMirrorRequest) => {
-    const service = new GiteaApiService(testLogger, mirrorSettings, ["gh-token-1", "gh-token-2"]);
-    const scope = nock("https://example.com");
+  ] satisfies [GiteaMirrorSettings, CreateRepoMirrorRequest][])(
+    "should create mirror from GitHubRepo",
+    async (mirrorSettings: GiteaMirrorSettings, expectedRequest: CreateRepoMirrorRequest) => {
+      const service = new GiteaApiService(testLogger, mirrorSettings, ["gh-token-1", "gh-token-2"]);
+      const scope = nock("https://example.com");
 
-    scope
-      .post("/repos/migrate", JSON.stringify(expectedRequest))
-      .matchHeader("authorization", "token gitea-token")
-      .matchHeader("content-type", "application/json")
-      .reply(201);
+      scope
+        .post("/repos/migrate", JSON.stringify(expectedRequest))
+        .matchHeader("authorization", "token gitea-token")
+        .matchHeader("content-type", "application/json")
+        .reply(201);
 
-    await service.createRepoMirror({
-      id: 1,
-      clone_url: "https://github.com/someuser/repo.git",
-      description: "A test repo",
-      full_name: "someuser/repo",
-      name: "repo",
-      visibility: "public",
-    });
+      await service.createRepoMirror({
+        id: 1,
+        clone_url: "https://github.com/someuser/repo.git",
+        description: "A test repo",
+        full_name: "someuser/repo",
+        name: "repo",
+        visibility: "public",
+      });
 
-    scope.done();
-  });
+      scope.done();
+    },
+  );
 });
